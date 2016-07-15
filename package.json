@@ -2,7 +2,7 @@
   "name": "vue-vnode-helper",
   "version": "0.1.0",
   "author": "katashin",
-  "description": "Vue's createElement helper",
+  "description": "A helper of Vue's createElement",
   "keywords": [
     "Vue",
     "helper",
