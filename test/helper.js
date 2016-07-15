@@ -5,13 +5,22 @@ import {
 } from '../src/helper'
 
 describe('extractArguments', () => {
+  it('no arguments', () => {
+    const a = extractArguments()
+    assert.deepStrictEqual(a, {
+      selector: null,
+      data: {},
+      children: void 0
+    })
+  })
+
   it('selector', () => {
     const selector = '.selector'
     const a = extractArguments(selector)
     assert.deepStrictEqual(a, {
       selector,
       data: {},
-      children: null
+      children: void 0
     })
   })
 
@@ -21,7 +30,7 @@ describe('extractArguments', () => {
     assert.deepStrictEqual(a, {
       selector: null,
       data,
-      children: null
+      children: void 0
     })
   })
 
@@ -42,7 +51,7 @@ describe('extractArguments', () => {
     assert.deepStrictEqual(a, {
       selector,
       data,
-      children: null
+      children: void 0
     })
   })
 
