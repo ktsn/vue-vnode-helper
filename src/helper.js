@@ -24,10 +24,18 @@ export function apply(h: Function, node: any): any {
 }
 
 /**
- * children: Array | premitive
+ * children: Array | Function | premitive
  */
 function applyChildren(h: Function, children: any): any {
-  return Array.isArray(children) ? children.map(c => apply(h, c)) : children
+  if (Array.isArray(children)) {
+    return children.map(c => apply(h, c))
+  }
+
+  if (typeof children === 'function') {
+    return () => children().map(c => apply(h, c))
+  }
+
+  return children
 }
 
 /**
