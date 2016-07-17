@@ -9,8 +9,8 @@ A helper of Vue's createElement inspired by [hyperscript-helpers](https://github
 
 ```js
 // component.js
-import helpers, { apply, tag } from 'vue-vnode-helper'
-const { article, h1, p } = helpers // Get element helpers you want to use
+import helpers, { apply } from 'vue-vnode-helper'
+const { article, h1, p, tag } = helpers // Get element helpers you want to use
 
 import OtherComponent from './other-component'
 
