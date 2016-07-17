@@ -1,8 +1,112 @@
 import assert from 'power-assert'
+import sinon from 'sinon'
 import {
+  default as create,
+  apply,
   extractArguments,
   parseSelector
 } from '../src/helper'
+
+describe('create and apply', () => {
+  const SPY = 'spy'
+  const t = create('t')
+  const h = sinon.spy(() => SPY)
+
+  beforeEach(() => {
+    h.reset()
+  })
+
+  it('normal usage', () => {
+    apply(h, t('#id.selector', { attrs: { test: 'test' }}))
+    assert(h.calledWith('t', { attrs: { test: 'test', id: 'id' }, staticClass: 'selector' }))
+  })
+
+  it('with children', () => {
+    apply(h,
+      t([
+        t('#id'),
+        t('.class', { key: 'key' })
+      ])
+    )
+
+    assert(h.callCount === 3)
+    assert.deepStrictEqual(
+      h.getCall(0).args,
+      ['t', { attrs: { id: 'id' }}, undefined]
+    )
+    assert.deepStrictEqual(
+      h.getCall(1).args,
+      ['t', { key: 'key', staticClass: 'class' }, undefined]
+    )
+    assert.deepStrictEqual(
+      h.getCall(2).args,
+      ['t', {}, [SPY, SPY]]
+    )
+  })
+
+  it('text node child', () => {
+    apply(h,
+      t('TextNode')
+    )
+
+    assert(h.calledWith('t', {}, 'TextNode'))
+  })
+
+  it('children array can be nested', () => {
+    apply(h,
+      t([
+        [t('.child')]
+      ])
+    )
+
+    assert(h.callCount === 2)
+    assert.deepStrictEqual(
+      h.getCall(0).args,
+      ['t', { staticClass: 'child' }, undefined]
+    )
+    assert.deepStrictEqual(
+      h.getCall(1).args,
+      ['t', {}, [[SPY]]]
+    )
+  })
+
+  it('text node in children array', () => {
+    apply(h,
+      t(['TextNode'])
+    )
+    assert(h.calledWith('t', {}, ['TextNode']))
+  })
+
+  it('thunk children', () => {
+    apply(h,
+      t(() => [
+        t('.child1'),
+        'Text',
+        [t('.child2')]
+      ])
+    )
+
+    assert(h.callCount === 1)
+
+    const thunk = h.getCall(0).args[2]
+    assert(typeof thunk === 'function')
+
+    assert.deepStrictEqual(
+      thunk(),
+      [SPY, 'Text', [SPY]]
+    )
+    assert(h.callCount === 3)
+
+    assert.deepStrictEqual(
+      h.getCall(1).args,
+      ['t', { staticClass: 'child1' }, undefined]
+    )
+    assert.deepStrictEqual(
+      h.getCall(2).args,
+      ['t', { staticClass: 'child2' }, undefined]
+    )
+  })
+})
 
 describe('extractArguments', () => {
   it('no arguments', () => {
