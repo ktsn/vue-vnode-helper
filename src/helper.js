@@ -27,12 +27,18 @@ export function apply(h: Function, node: any): any {
  * children: Array | Function | premitive
  */
 function applyChildren(h: Function, children: any): any {
-  if (Array.isArray(children)) {
-    return children.map(c => apply(h, c))
+  if (typeof children === 'function') {
+    return () => applyChildren(h, children())
   }
 
-  if (typeof children === 'function') {
-    return () => children().map(c => apply(h, c))
+  if (Array.isArray(children)) {
+    return children.map(c => {
+      // Nested
+      if (Array.isArray(c)) {
+        return applyChildren(h, c)
+      }
+      return apply(h, c)
+    })
   }
 
   return children
