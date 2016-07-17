@@ -3,7 +3,7 @@
 [![npm version](https://badge.fury.io/js/vue-vnode-helper.svg)](https://badge.fury.io/js/vue-vnode-helper)
 [![Build Status](https://travis-ci.org/ktsn/vue-vnode-helper.svg?branch=master)](https://travis-ci.org/ktsn/vue-vnode-helper)
 
-A helper of Vue's createElement inspired by [hyperscript-helpers](https://github.com/ohanhi/hyperscript-helpers).
+Helpers for Vue's createElement inspired by [hyperscript-helpers](https://github.com/ohanhi/hyperscript-helpers).
 
 ## Example
 
