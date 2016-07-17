@@ -17,17 +17,31 @@ export default function create(tagName: string): (...args: any[]) => Function {
 }
 
 /**
- * node: Function | premitive
+ * node: Function | primitive
  */
 export function apply(h: Function, node: any): any {
   return typeof node === 'function' ? node(h) : node
 }
 
 /**
- * children: Array | premitive
+ * children: Array | Function | primitive
  */
 function applyChildren(h: Function, children: any): any {
-  return Array.isArray(children) ? children.map(c => apply(h, c)) : children
+  if (typeof children === 'function') {
+    return () => applyChildren(h, children())
+  }
+
+  if (Array.isArray(children)) {
+    return children.map(c => {
+      // Nested
+      if (Array.isArray(c)) {
+        return applyChildren(h, c)
+      }
+      return apply(h, c)
+    })
+  }
+
+  return children
 }
 
 /**
