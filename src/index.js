@@ -18,4 +18,4 @@ export function createHelpers(names: string[]): { [key: string]: (...args: any[]
   return helpers
 }
 
-export default createHelpers(elementNames)
+export const helpers = createHelpers(elementNames)
