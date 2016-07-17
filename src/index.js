@@ -5,7 +5,7 @@ import create from './helper'
 
 export { apply } from './helper'
 
-export function tag(head: string, ...tail: any[]): Function {
+function tag(head: string, ...tail: any[]): Function {
   return create(head)(...tail)
 }
 
@@ -14,6 +14,7 @@ export function createHelpers(names: string[]): { [key: string]: (...args: any[]
   names.forEach(name => {
     helpers[name] = create(name)
   })
+  helpers.tag = tag
   return helpers
 }
 
