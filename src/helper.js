@@ -17,14 +17,14 @@ export default function create(tagName: string): (...args: any[]) => Function {
 }
 
 /**
- * node: Function | premitive
+ * node: Function | primitive
  */
 export function apply(h: Function, node: any): any {
   return typeof node === 'function' ? node(h) : node
 }
 
 /**
- * children: Array | Function | premitive
+ * children: Array | Function | primitive
  */
 function applyChildren(h: Function, children: any): any {
   if (typeof children === 'function') {
