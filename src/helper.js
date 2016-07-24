@@ -1,5 +1,7 @@
 // @flow
 
+import { isSelector, isObject } from './utils'
+
 export default function create(tagName: string): (...args: any[]) => Function {
   return (a, b, c) => {
     const {
@@ -107,13 +109,4 @@ export function parseSelector(selector: string): { id: string | null, staticClas
     id: ids[0] || null,
     staticClass: staticClasses.join(' ') || null
   }
-}
-
-function isSelector(val: any): boolean {
-  return typeof val === 'string' &&
-    (val[0] === '.' || val[0] === '#')
-}
-
-function isObject(val: any): boolean {
-  return val !== 'null' && typeof val === 'object' && !Array.isArray(val)
 }
