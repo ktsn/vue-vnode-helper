@@ -21,5 +21,8 @@ export const elementNames: string[] = [
   'form', 'label', 'input', 'button', 'select',
   'datalist', 'optgroup', 'option', 'textarea', 'keygen',
   'output', 'progress', 'meter', 'fieldset', 'legend',
-  'script', 'noscript', 'template', 'canvas'
+  'script', 'noscript', 'template', 'canvas',
+
+  // build-in components of Vue.js
+  'transition', 'transition-group'
 ]

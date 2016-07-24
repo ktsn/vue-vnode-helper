@@ -8,3 +8,7 @@ export function isSelector(val: any): boolean {
 export function isObject(val: any): boolean {
   return val !== 'null' && typeof val === 'object' && !Array.isArray(val)
 }
+
+export function kebabToCamel(str: string): string {
+  return str.replace(/-(.)/g, (match, c) => c.toUpperCase())
+}
