@@ -24,5 +24,5 @@ export const elementNames: string[] = [
   'script', 'noscript', 'template', 'canvas',
 
   // build-in components of Vue.js
-  'transition', 'transition-group'
+  'transition', 'transition-group', 'keep-alive'
 ]
