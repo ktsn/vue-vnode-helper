@@ -17,8 +17,8 @@ describe('create and apply', () => {
   })
 
   it('normal usage', () => {
-    apply(h, t('#id.selector', { attrs: { test: 'test' }}))
-    assert(h.calledWith('t', { attrs: { test: 'test', id: 'id' }, staticClass: 'selector' }))
+    apply(h, t('#id.selector', { staticAttrs: { test: 'test' }}))
+    assert(h.calledWith('t', { staticAttrs: { test: 'test', id: 'id' }, staticClass: 'selector' }))
   })
 
   it('with children', () => {
@@ -32,7 +32,7 @@ describe('create and apply', () => {
     assert(h.callCount === 3)
     assert.deepStrictEqual(
       h.getCall(0).args,
-      ['t', { attrs: { id: 'id' }}, undefined]
+      ['t', { staticAttrs: { id: 'id' }}, undefined]
     )
     assert.deepStrictEqual(
       h.getCall(1).args,
