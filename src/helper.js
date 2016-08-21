@@ -84,10 +84,10 @@ function insertSelectorToData(data: Object, selector: string): void {
   }
 
   if (id) {
-    if (!isObject(data.attrs)) {
-      data.attrs = {}
+    if (!isObject(data.staticAttrs)) {
+      data.staticAttrs = {}
     }
-    data.attrs.id = id
+    data.staticAttrs.id = id
   }
 }
 
