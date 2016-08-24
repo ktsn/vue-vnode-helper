@@ -2,7 +2,7 @@
 
 export default function cloneNode(vnode: any, data?: any, children?: any): Function {
   if (data) {
-    data = merge(vnode.data, data)
+    data = merge(vnode.data || {}, data)
   } else {
     data = vnode.data
   }
