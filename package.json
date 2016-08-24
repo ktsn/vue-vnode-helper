@@ -1,6 +1,6 @@
 {
   "name": "vue-vnode-helper",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "author": "katashin",
   "description": "Helpers for Vue's createElement",
   "keywords": [
