@@ -1,4 +1,5 @@
 node_modules/
 
+/clone-node.js
 /dist/
 /.tmp/
