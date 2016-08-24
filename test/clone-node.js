@@ -47,7 +47,7 @@ describe('cloneNode', () => {
     }
 
     checkTag(data, null, (vnode, clone) => {
-      assert.deepStrictEqual(clone.data, Object.assign({}, vnode.data, {
+      assert.deepStrictEqual(clone.data, merge(vnode.data, {
         attrs: { 'data-test': 'foo' }
       }))
       done()
@@ -79,7 +79,7 @@ describe('cloneNode', () => {
     }
 
     checkComponent(data, null, (vnode, clone) => {
-      assert.deepStrictEqual(clone.data, Object.assign({}, vnode.data, {
+      assert.deepStrictEqual(clone.data, merge(vnode.data, {
         attrs: { 'data-test': 'foo' }
       }))
       done()
@@ -96,3 +96,13 @@ describe('cloneNode', () => {
     })
   })
 })
+
+function merge(...args: Object[]): Object {
+  const res = {}
+  args.forEach(obj => {
+    Object.keys(obj).forEach(key => {
+      res[key] = obj[key]
+    })
+  })
+  return res
+}
