@@ -1,5 +1,3 @@
-// @flow
-
 export const elementNames: string[] = [
   'html', 'head', 'title', 'base',
   'link', 'meta', 'style', 'body',

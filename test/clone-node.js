@@ -97,7 +97,7 @@ describe('cloneNode', () => {
   })
 })
 
-function merge(...args: Object[]): Object {
+function merge(...args) {
   const res = {}
   args.forEach(obj => {
     Object.keys(obj).forEach(key => {

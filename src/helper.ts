@@ -1,5 +1,4 @@
-// @flow
-
+import { CreateElement, VNodeData } from 'vue'
 import { isSelector, isObject } from './utils'
 
 export default function create(tagName: string): (...args: any[]) => Function {
@@ -14,7 +13,7 @@ export default function create(tagName: string): (...args: any[]) => Function {
       insertSelectorToData(data, selector)
     }
 
-    return h => h(tagName, data, applyChildren(h, children))
+    return (h: CreateElement) => h(tagName, data, applyChildren(h, children))
   }
 }
 
@@ -57,7 +56,11 @@ function applyChildren(h: Function, children: any): any {
  * or data
  * or children
  */
-export function extractArguments(a: any, b: any, c: any): { selector: ?string, data: Object, children: ?any } {
+export function extractArguments(a: any, b: any, c: any): {
+  selector: string | null,
+  data: Object,
+  children: any
+} {
   if (!isSelector(a)) {
     c = b
     b = a
@@ -76,7 +79,7 @@ export function extractArguments(a: any, b: any, c: any): { selector: ?string, d
   }
 }
 
-function insertSelectorToData(data: Object, selector: string): void {
+function insertSelectorToData(data: VNodeData, selector: string): void {
   const { id, staticClass } = parseSelector(selector)
 
   if (staticClass) {
@@ -87,7 +90,7 @@ function insertSelectorToData(data: Object, selector: string): void {
     if (!isObject(data.attrs)) {
       data.attrs = {}
     }
-    data.attrs.id = id
+    data.attrs['id'] = id
   }
 }
 
@@ -95,8 +98,8 @@ export function parseSelector(selector: string): { id: string | null, staticClas
   const selectorRegexp = /([\.#][^\s.#]+)/
   const items = selector.split(selectorRegexp)
 
-  const ids = []
-  const staticClasses = []
+  const ids: string[] = []
+  const staticClasses: string[] = []
   items.forEach(item => {
     if (item[0] === '.') {
       staticClasses.push(item.slice(1))

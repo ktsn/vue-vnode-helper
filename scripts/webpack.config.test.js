@@ -9,11 +9,12 @@ module.exports = {
   },
   resolve: {
     modulesDirectories: ['node_modules'],
-    extensions: ['', '.js']
+    extensions: ['', '.js', '.ts']
   },
   module: {
     loaders: [
       { test: /\.js$/, loader: 'babel', exclude: /node_modules/ },
+      { test: /\.ts$/, loader: 'ts' },
       { test: /\.json$/, loader: 'json' }
     ]
   },

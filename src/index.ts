@@ -1,5 +1,3 @@
-// @flow
-
 import { elementNames } from './config'
 import { kebabToCamel } from './utils'
 import create from './helper'
@@ -11,11 +9,11 @@ function tag(head: string, ...tail: any[]): Function {
 }
 
 export function createHelpers(names: string[]): { [key: string]: (...args: any[]) => Function } {
-  const helpers = {}
+  const helpers: { [key: string]: (...args: any[]) => Function } = {}
   names.forEach(name => {
     helpers[kebabToCamel(name)] = create(name)
   })
-  helpers.tag = tag
+  helpers['tag'] = tag
   return helpers
 }
 
