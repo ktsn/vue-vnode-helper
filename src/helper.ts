@@ -56,7 +56,7 @@ function applyChildren(h: Function, children: any): any {
  * or data
  * or children
  */
-export function extractArguments(a: any, b: any, c: any): {
+export function extractArguments(a?: any, b?: any, c?: any): {
   selector: string | null,
   data: Object,
   children: any

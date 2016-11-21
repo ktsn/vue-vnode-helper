@@ -1,7 +1,7 @@
-import assert from 'power-assert'
+import * as assert from 'power-assert'
 import { apply } from '../src'
 import cloneNode from '../src/clone-node'
-import Vue from 'vue'
+import * as Vue from 'vue'
 
 describe('cloneNode', () => {
   function createCheckFn(tag, originalData, originalChildren) {
@@ -11,6 +11,7 @@ describe('cloneNode', () => {
           const vnode = h(tag, originalData, originalChildren)
           const clone = apply(h, cloneNode(vnode, data, children))
           assertFn(vnode, clone)
+          return h()
         }
       }
       new Vue(options).$mount()

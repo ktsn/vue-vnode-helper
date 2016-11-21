@@ -1,4 +1,4 @@
-import assert from 'power-assert'
+import * as assert from 'power-assert'
 import { elementNames } from '../src/config'
 import { helpers } from '../src/index'
 import { kebabToCamel } from '../src/utils'

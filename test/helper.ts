@@ -1,5 +1,5 @@
-import assert from 'power-assert'
-import sinon from 'sinon'
+import * as assert from 'power-assert'
+import * as sinon from 'sinon'
 import {
   default as create,
   apply,
