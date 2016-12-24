@@ -6,6 +6,10 @@ export default function cloneNode(
   data?: Vue.VNodeData,
   children?: Vue.VNodeChildren
 ): VNodeThunk {
+  console.warn(
+    '[vue-vnode-helper] cloneNode is deprecated and will be removed in the later version.'
+  )
+
   if (data) {
     data = merge(vnode.data || {}, data)
   } else {
