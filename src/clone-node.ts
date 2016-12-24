@@ -18,7 +18,7 @@ export default function cloneNode(
 
   let tag: string | typeof Vue
   if (vnode.componentOptions) {
-    tag = vnode.componentOptions.Ctor as any
+    tag = vnode.componentOptions.Ctor
     children = children || vnode.componentOptions.children
   } else {
     tag = vnode.tag!

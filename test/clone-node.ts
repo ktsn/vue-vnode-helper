@@ -91,8 +91,9 @@ describe('cloneNode', () => {
     const children = ['foo', 'bar']
 
     checkComponent(null, children, (vnode, clone) => {
-      assert.deepStrictEqual(vnode.componentOptions.children, ['children'])
-      assert.deepStrictEqual(clone.componentOptions.children, children)
+      const stringify = vnode => vnode.text
+      assert.deepStrictEqual(vnode.componentOptions.children.map(stringify), ['children'])
+      assert.deepStrictEqual(clone.componentOptions.children.map(stringify), ['foobar'])
       done()
     })
   })
