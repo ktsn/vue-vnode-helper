@@ -1,11 +1,23 @@
 import { elementNames } from './config'
 import { kebabToCamel } from './utils'
 import { create } from './helper'
-import { VNodeThunk, VNodeHelper } from './declarations'
+import {
+  VNodeData,
+  VNodeChildren,
+  VNodeThunk,
+  VNodeHelper,
+  Props,
+  On
+} from './declarations'
 
 export { create as createHelper }
 export { apply } from './helper'
 
+export function tag(head: string): VNodeThunk
+export function tag(head: string, children: VNodeChildren): VNodeThunk
+export function tag(head: string, data: VNodeData<Props, On>, children?: VNodeChildren): VNodeThunk
+export function tag(head: string, selector: string, children: VNodeChildren): VNodeThunk
+export function tag(head: string, selector: string, data?: VNodeData<Props, On>, children?: VNodeChildren): VNodeThunk
 export function tag(head: string, a?: any, b?: any, c?: any): VNodeThunk {
   return create(head)(a, b, c)
 }
