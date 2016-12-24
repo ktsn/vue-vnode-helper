@@ -25,7 +25,9 @@ export default function cloneNode(
     children = children || vnode.children
   }
 
-  return (h: Vue.CreateElement) => h(tag, data, children)
+  const thunk: any = (h: Vue.CreateElement) => h(tag, data, children)
+  thunk._thunk = true
+  return thunk
 }
 
 function merge(...args: any[]): any {
