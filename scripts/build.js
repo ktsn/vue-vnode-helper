@@ -1,6 +1,6 @@
 const fs = require('fs')
 const rollup = require('rollup').rollup
-const babel = require('rollup-plugin-babel')
+const typescript = require('rollup-plugin-typescript')
 const replace = require('rollup-plugin-replace')
 const uglify = require('rollup-plugin-uglify')
 const meta = require('../package.json')
@@ -14,13 +14,13 @@ const banner = `/*!
  * ${meta.homepage}/blob/master/LICENSE
  */`
 
-const moduleName = 'Lib'
+const moduleName = 'VueVNodeHelper'
 
 const config = {
-  entry: 'src/index.js',
+  entry: 'src/index.ts',
   plugins: [
-    babel({
-      exclude: 'node_modules/**'
+    typescript({
+      typescript: require('typescript')
     })
   ]
 }
@@ -67,7 +67,7 @@ rollup(config)
   }))
   .then(() => {
     const configCloneNode = Object.assign({}, config, {
-      entry: 'src/clone-node.js'
+      entry: 'src/clone-node.ts'
     })
     return rollup(configCloneNode)
   })

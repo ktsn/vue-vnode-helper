@@ -1,7 +1,7 @@
-import assert from 'power-assert'
+import * as assert from 'power-assert'
 import { apply } from '../src'
 import cloneNode from '../src/clone-node'
-import Vue from 'vue'
+import * as Vue from 'vue'
 
 describe('cloneNode', () => {
   function createCheckFn(tag, originalData, originalChildren) {
@@ -11,6 +11,7 @@ describe('cloneNode', () => {
           const vnode = h(tag, originalData, originalChildren)
           const clone = apply(h, cloneNode(vnode, data, children))
           assertFn(vnode, clone)
+          return h()
         }
       }
       new Vue(options).$mount()
@@ -90,14 +91,15 @@ describe('cloneNode', () => {
     const children = ['foo', 'bar']
 
     checkComponent(null, children, (vnode, clone) => {
-      assert.deepStrictEqual(vnode.componentOptions.children, ['children'])
-      assert.deepStrictEqual(clone.componentOptions.children, children)
+      const stringify = vnode => vnode.text
+      assert.deepStrictEqual(vnode.componentOptions.children.map(stringify), ['children'])
+      assert.deepStrictEqual(clone.componentOptions.children.map(stringify), ['foobar'])
       done()
     })
   })
 })
 
-function merge(...args: Object[]): Object {
+function merge(...args) {
   const res = {}
   args.forEach(obj => {
     Object.keys(obj).forEach(key => {
