@@ -29,14 +29,13 @@
     "build": "cross-env NODE_ENV=production node scripts/build.js",
     "build:test": "webpack --config scripts/webpack.config.test.js",
     "watch:test": "webpack -w --config scripts/webpack.config.test.js",
-    "flow": "flow check",
     "lint": "tslint src/**/*.ts test/**/*.ts",
     "lint:fix": "tslint --fix src/**/*.ts test/**/*.ts",
     "testem": "testem",
     "testem:ci": "testem ci --launch PhantomJS",
     "test": "run-p watch:test testem",
     "test:ci": "run-s build:test testem:ci",
-    "release": "run-s lint flow test:ci clean build"
+    "release": "run-s lint test:ci clean build"
   },
   "devDependencies": {
     "@types/mocha": "^2.2.33",
