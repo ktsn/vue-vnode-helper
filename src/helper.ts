@@ -1,14 +1,23 @@
 import * as Vue from 'vue'
+
 import {
   CreateVNodeHelper,
+  VNodeHelper,
   VNodeThunk,
   VNodeData,
   VNodeChildren,
-  VNodeChild
+  VNodeChild,
+  Props,
+  On
 } from './declarations'
-import { isSelector, isObject } from './utils'
 
-export const create: CreateVNodeHelper = tagName => {
+import {
+  kebabToCamel,
+  isSelector,
+  isObject
+} from './utils'
+
+export const createHelper: CreateVNodeHelper = tagName => {
   return (a?: any, b?: any, c?: any) => {
     const {
       selector,
@@ -22,6 +31,23 @@ export const create: CreateVNodeHelper = tagName => {
 
     return (h: Vue.CreateElement) => h(tagName, data, applyChildren(h, children))
   }
+}
+
+export function createHelpers(names: string[]): { [key: string]: VNodeHelper<Props, On> } {
+  const helpers: { [key: string]: VNodeHelper<Props, On> } = {}
+  names.forEach(name => {
+    helpers[kebabToCamel(name)] = createHelper(name)
+  })
+  return helpers
+}
+
+export function tag(head: string): VNodeThunk
+export function tag(head: string, children: VNodeChildren): VNodeThunk
+export function tag(head: string, data: VNodeData<Props, On>, children?: VNodeChildren): VNodeThunk
+export function tag(head: string, selector: string, children: VNodeChildren): VNodeThunk
+export function tag(head: string, selector: string, data?: VNodeData<Props, On>, children?: VNodeChildren): VNodeThunk
+export function tag(head: string, a?: any, b?: any, c?: any): VNodeThunk {
+  return createHelper(head)(a, b, c)
 }
 
 /**
@@ -68,7 +94,7 @@ function applyChildren(
  */
 export function extractArguments(a?: any, b?: any, c?: any): {
   selector: string | null,
-  data: VNodeData<any, any>,
+  data: VNodeData<Props, On>,
   children: VNodeChildren | undefined
 } {
   if (!isSelector(a)) {
@@ -89,7 +115,7 @@ export function extractArguments(a?: any, b?: any, c?: any): {
   }
 }
 
-function insertSelectorToData(data: VNodeData<any, any>, selector: string): void {
+function insertSelectorToData(data: VNodeData<Props, On>, selector: string): void {
   const { id, staticClass } = parseSelector(selector)
 
   if (staticClass) {

@@ -1,7 +1,7 @@
 import * as assert from 'power-assert'
 import * as sinon from 'sinon'
 import {
-  create,
+  createHelper,
   apply,
   extractArguments,
   parseSelector
@@ -9,7 +9,7 @@ import {
 
 describe('create and apply', () => {
   const SPY = 'spy'
-  const t = create('t')
+  const t = createHelper('t')
   const h = sinon.spy(() => SPY)
 
   beforeEach(() => {
