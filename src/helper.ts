@@ -1,8 +1,15 @@
-import { CreateElement, VNodeData } from 'vue'
+import * as Vue from 'vue'
+import {
+  CreateVNodeHelper,
+  VNodeThunk,
+  VNodeData,
+  VNodeChildren,
+  VNodeChild
+} from './declarations'
 import { isSelector, isObject } from './utils'
 
-export default function create(tagName: string): (...args: any[]) => Function {
-  return (a, b, c) => {
+export const create: CreateVNodeHelper = tagName => {
+  return (a?: any, b?: any, c?: any) => {
     const {
       selector,
       data,
@@ -13,30 +20,33 @@ export default function create(tagName: string): (...args: any[]) => Function {
       insertSelectorToData(data, selector)
     }
 
-    return (h: CreateElement) => h(tagName, data, applyChildren(h, children))
+    return (h: Vue.CreateElement) => h(tagName, data, applyChildren(h, children))
   }
 }
 
 /**
  * node: Function | primitive
  */
-export function apply(h: Function, node: any): any {
+export function apply(
+  h: Vue.CreateElement,
+  node: VNodeThunk | string
+): Vue.VNode | string {
   return typeof node === 'function' ? node(h) : node
 }
 
 /**
- * children: Array | Function | primitive
+ * children: Array | primitive
  */
-function applyChildren(h: Function, children: any): any {
-  if (typeof children === 'function') {
-    return () => applyChildren(h, children())
-  }
-
+function applyChildren(
+  h: Vue.CreateElement,
+  children: VNodeChildren | undefined
+): Vue.VNodeChildren | undefined {
   if (Array.isArray(children)) {
-    return children.map(c => {
+    const cs: VNodeChild[] = children
+    return cs.map(c => {
       // Nested
       if (Array.isArray(c)) {
-        return applyChildren(h, c)
+        return applyChildren(h, c)!
       }
       return apply(h, c)
     })
@@ -58,8 +68,8 @@ function applyChildren(h: Function, children: any): any {
  */
 export function extractArguments(a?: any, b?: any, c?: any): {
   selector: string | null,
-  data: Object,
-  children: any
+  data: VNodeData<any, any>,
+  children: VNodeChildren | undefined
 } {
   if (!isSelector(a)) {
     c = b
@@ -79,7 +89,7 @@ export function extractArguments(a?: any, b?: any, c?: any): {
   }
 }
 
-function insertSelectorToData(data: VNodeData, selector: string): void {
+function insertSelectorToData(data: VNodeData<any, any>, selector: string): void {
   const { id, staticClass } = parseSelector(selector)
 
   if (staticClass) {
@@ -94,7 +104,10 @@ function insertSelectorToData(data: VNodeData, selector: string): void {
   }
 }
 
-export function parseSelector(selector: string): { id: string | null, staticClass: string | null } {
+export function parseSelector(selector: string): {
+  id: string | null,
+  staticClass: string | null
+} {
   const selectorRegexp = /([\.#][^\s.#]+)/
   const items = selector.split(selectorRegexp)
 

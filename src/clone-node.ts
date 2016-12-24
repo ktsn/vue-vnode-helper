@@ -1,10 +1,11 @@
 import * as Vue from 'vue'
+import { VNodeThunk } from './declarations'
 
 export default function cloneNode(
   vnode: Vue.VNode,
   data?: Vue.VNodeData,
   children?: Vue.VNodeChildren
-): Function {
+): VNodeThunk {
   if (data) {
     data = merge(vnode.data || {}, data)
   } else {

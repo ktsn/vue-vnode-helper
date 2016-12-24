@@ -1,19 +1,20 @@
 import { elementNames } from './config'
 import { kebabToCamel } from './utils'
-import create from './helper'
+import { create } from './helper'
+import { VNodeThunk, VNodeHelper } from './declarations'
 
+export { create as createHelper }
 export { apply } from './helper'
 
-function tag(head: string, ...tail: any[]): Function {
-  return create(head)(...tail)
+export function tag(head: string, a?: any, b?: any, c?: any): VNodeThunk {
+  return create(head)(a, b, c)
 }
 
-export function createHelpers(names: string[]): { [key: string]: (...args: any[]) => Function } {
-  const helpers: { [key: string]: (...args: any[]) => Function } = {}
+export function createHelpers(names: string[]): { [key: string]: VNodeHelper<any, any> } {
+  const helpers: { [key: string]: VNodeHelper<any, any> } = {}
   names.forEach(name => {
     helpers[kebabToCamel(name)] = create(name)
   })
-  helpers['tag'] = tag
   return helpers
 }
 

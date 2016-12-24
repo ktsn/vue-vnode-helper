@@ -56,7 +56,7 @@
     "ts-loader": "^1.2.2",
     "tslint": "^4.0.1",
     "tslint-config-ktsn": "^2.0.0",
-    "typescript": "^2.1.1",
+    "typescript": "^2.1.4",
     "vue": "^2.0.3",
     "webpack": "^1.13.2",
     "webpack-espower-loader": "^1.0.1"

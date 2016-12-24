@@ -7,7 +7,7 @@ describe('build-in helpers', () => {
   it('should expose helpers', () => {
     const keys = Object.keys(helpers)
 
-    assert(elementNames.length + 1 === keys.length) // include tag helper
+    assert(elementNames.length === keys.length) 
     elementNames.forEach(name => {
       assert(typeof helpers[kebabToCamel(name)] === 'function')
     })
