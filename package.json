@@ -13,8 +13,10 @@
   ],
   "license": "MIT",
   "main": "dist/vue-vnode-helper.common.js",
+  "typings": "lib/index.d.ts",
   "files": [
     "dist",
+    "lib",
     "clone-node.js"
   ],
   "homepage": "https://github.com/ktsn/vue-vnode-helper",
@@ -26,7 +28,9 @@
   "scripts": {
     "prepublish": "npm run release",
     "clean": "rm -rf dist .tmp",
-    "build": "cross-env NODE_ENV=production node scripts/build.js",
+    "build": "run-s build:ts build:bundle",
+    "build:ts": "tsc -p .",
+    "build:bundle": "node scripts/build.js",
     "build:test": "webpack --config scripts/webpack.config.test.js",
     "watch:test": "webpack -w --config scripts/webpack.config.test.js",
     "lint": "tslint src/**/*.ts test/**/*.ts",
@@ -41,7 +45,6 @@
     "@types/mocha": "^2.2.34",
     "@types/power-assert": "^1.4.29",
     "@types/sinon": "^1.16.33",
-    "cross-env": "^3.1.3",
     "glob": "^7.1.1",
     "json-loader": "^0.5.4",
     "npm-run-all": "^3.1.2",
@@ -49,7 +52,6 @@
     "rollup": "^0.38.0",
     "rollup-plugin-json": "^2.1.0",
     "rollup-plugin-replace": "^1.1.1",
-    "rollup-plugin-typescript": "^0.8.1",
     "rollup-plugin-uglify": "^1.0.1",
     "sinon": "^2.0.0-pre.2",
     "testem": "^1.14.1",
