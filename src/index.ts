@@ -2,6 +2,8 @@ import { elementNames } from './config'
 import { createHelpers } from './helper'
 import { VNodeHelper } from './declarations'
 
+export * from './declarations'
+
 export {
   tag,
   apply,
