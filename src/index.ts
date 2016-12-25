@@ -7,8 +7,7 @@ export * from './declarations'
 export {
   tag,
   apply,
-  createHelper,
-  createHelpers
+  createHelper
 } from './helper'
 
 export const helpers = createHelpers(elementNames)
