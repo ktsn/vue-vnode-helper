@@ -8,13 +8,12 @@ module.exports = {
     filename: 'test.js'
   },
   resolve: {
-    modulesDirectories: ['node_modules'],
-    extensions: ['', '.js', '.json', '.ts']
+    extensions: ['.js', '.json', '.ts']
   },
   module: {
-    loaders: [
-      { test: /\.ts$/, loader: 'webpack-espower!ts' },
-      { test: /\.json$/, loader: 'json' }
+    rules: [
+      { test: /\.ts$/, loader: 'webpack-espower-loader!ts-loader' },
+      { test: /\.json$/, loader: 'json-loader' }
     ]
   },
   devtool: 'source-map'

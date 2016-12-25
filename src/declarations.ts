@@ -1,19 +1,21 @@
 import * as Vue from 'vue'
 
-export type Props = { [key: string]: any }
-export type On = { [key: string]: Function }
+export type VNodeThunk = {
+  (h: Vue.CreateElement): Vue.VNode
+  _thunk: true
+}
 
-export type VNodeThunk = (h: Vue.CreateElement) => Vue.VNode
-
-export interface VNodeData<P extends Props, E extends On> extends Vue.VNodeData {
+export type VNodeData<P, E> = Vue.VNodeData & {
   props?: P
   on?: E
 }
 
-export type VNodeChildren = any[] | string
+export type VNodeChildren = any[] | [ScopedSlot] | string
 export type VNodeChild = VNodeThunk | string | VNodeChildren
 
-export interface VNodeHelper<P extends Props, E extends On> {
+export type ScopedSlot = (props: any) => VNodeChildren | string
+
+export interface VNodeHelper<P, E> {
   (): VNodeThunk
   (children: VNodeChildren): VNodeThunk
   (data: VNodeData<P, E>, children?: VNodeChildren): VNodeThunk
@@ -22,5 +24,5 @@ export interface VNodeHelper<P extends Props, E extends On> {
 }
 
 export interface CreateVNodeHelper {
-  (tagName: string): VNodeHelper<Props, On>
+  (tagName: string): VNodeHelper<any, any>
 }

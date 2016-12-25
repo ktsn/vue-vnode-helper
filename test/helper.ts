@@ -77,22 +77,24 @@ describe('create and apply', () => {
     assert(h.calledWith('t', {}, ['TextNode']))
   })
 
-  xit('thunk children', () => {
+  it('scoped slots', () => {
     apply(h,
-      t(() => [
-        t('.child1'),
-        'Text',
-        [t('.child2')]
+      t([
+        ({ value }) => [
+          t('.child1'),
+          value,
+          [t('.child2')]
+        ]
       ])
     )
 
     assert(h.callCount === 1)
 
-    const thunk = h.getCall(0).args[2]
-    assert(typeof thunk === 'function')
+    const scopedSlot = h.getCall(0).args[2][0]
+    assert(typeof scopedSlot === 'function')
 
     assert.deepStrictEqual(
-      thunk(),
+      scopedSlot({ value: 'Text' }),
       [SPY, 'Text', [SPY]]
     )
     assert(h.callCount === 3)

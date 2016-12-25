@@ -1,6 +1,5 @@
 const fs = require('fs')
 const rollup = require('rollup').rollup
-const typescript = require('rollup-plugin-typescript')
 const replace = require('rollup-plugin-replace')
 const uglify = require('rollup-plugin-uglify')
 const meta = require('../package.json')
@@ -9,6 +8,7 @@ const banner = `/*!
  * ${meta.name} v${meta.version}
  * ${meta.homepage}
  *
+ * @license
  * Copyright (c) 2016 ${meta.author}
  * Released under the MIT license
  * ${meta.homepage}/blob/master/LICENSE
@@ -17,12 +17,8 @@ const banner = `/*!
 const moduleName = 'VueVNodeHelper'
 
 const config = {
-  entry: 'src/index.ts',
-  plugins: [
-    typescript({
-      typescript: require('typescript')
-    })
-  ]
+  entry: 'lib/index.js',
+  plugins: []
 }
 
 mkdirIfNotExists('dist')
@@ -51,10 +47,11 @@ rollup(config)
     uglify({
       output: {
         comments: function(node, comment) {
-          const text = comment.value
-          const type = comment.type
-          if (type === 'comment2') {
-            return /^!/i.test(text)
+          const text = comment.value;
+          const type = comment.type;
+          if (type == "comment2") {
+            // multiline comment
+            return /@preserve|@license|@cc_on/i.test(text);
           }
         }
       }
@@ -67,7 +64,7 @@ rollup(config)
   }))
   .then(() => {
     const configCloneNode = Object.assign({}, config, {
-      entry: 'src/clone-node.ts'
+      entry: 'lib/clone-node.js'
     })
     return rollup(configCloneNode)
   })
@@ -86,9 +83,7 @@ function addPlugins(config, plugins) {
 }
 
 function mkdirIfNotExists(dirPath) {
-  try {
-    fs.statSync(dirPath)
-  } catch (error) {
+  if (!fs.existsSync(dirPath)) {
     fs.mkdirSync(dirPath)
   }
 }

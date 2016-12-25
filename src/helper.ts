@@ -7,12 +7,13 @@ import {
   VNodeData,
   VNodeChildren,
   VNodeChild,
-  Props,
-  On
+  ScopedSlot
 } from './declarations'
 
 import {
   kebabToCamel,
+  isThunk,
+  isScopedSlot,
   isSelector,
   isObject
 } from './utils'
@@ -29,12 +30,14 @@ export const createHelper: CreateVNodeHelper = tagName => {
       insertSelectorToData(data, selector)
     }
 
-    return (h: Vue.CreateElement) => h(tagName, data, applyChildren(h, children))
+    const thunk: any = (h: Vue.CreateElement) => h(tagName, data, applyChildren(h, children))
+    thunk._thunk = true
+    return thunk
   }
 }
 
-export function createHelpers(names: string[]): { [key: string]: VNodeHelper<Props, On> } {
-  const helpers: { [key: string]: VNodeHelper<Props, On> } = {}
+export function createHelpers(names: string[]): { [key: string]: VNodeHelper<any, any> } {
+  const helpers: { [key: string]: VNodeHelper<any, any> } = {}
   names.forEach(name => {
     helpers[kebabToCamel(name)] = createHelper(name)
   })
@@ -43,32 +46,33 @@ export function createHelpers(names: string[]): { [key: string]: VNodeHelper<Pro
 
 export function tag(head: string): VNodeThunk
 export function tag(head: string, children: VNodeChildren): VNodeThunk
-export function tag(head: string, data: VNodeData<Props, On>, children?: VNodeChildren): VNodeThunk
+export function tag(head: string, data: VNodeData<any, any>, children?: VNodeChildren): VNodeThunk
 export function tag(head: string, selector: string, children: VNodeChildren): VNodeThunk
-export function tag(head: string, selector: string, data?: VNodeData<Props, On>, children?: VNodeChildren): VNodeThunk
+export function tag(head: string, selector: string, data?: VNodeData<any, any>, children?: VNodeChildren): VNodeThunk
 export function tag(head: string, a?: any, b?: any, c?: any): VNodeThunk {
   return createHelper(head)(a, b, c)
 }
 
-/**
- * node: Function | primitive
- */
 export function apply(
   h: Vue.CreateElement,
   node: VNodeThunk | string
 ): Vue.VNode | string {
-  return typeof node === 'function' ? node(h) : node
+  return isThunk(node) ? node(h) : node
 }
 
-/**
- * children: Array | primitive
- */
 function applyChildren(
   h: Vue.CreateElement,
   children: VNodeChildren | undefined
 ): Vue.VNodeChildren | undefined {
   if (Array.isArray(children)) {
-    const cs: VNodeChild[] = children
+    const cs: VNodeChild[] | [ScopedSlot] = children
+
+    if (isScopedSlot(cs)) {
+      return [
+        (props: any) => applyChildren(h, cs[0](props)) as Vue.VNodeChildrenArrayContents
+      ]
+    }
+
     return cs.map(c => {
       // Nested
       if (Array.isArray(c)) {
@@ -94,7 +98,7 @@ function applyChildren(
  */
 export function extractArguments(a?: any, b?: any, c?: any): {
   selector: string | null,
-  data: VNodeData<Props, On>,
+  data: VNodeData<any, any>,
   children: VNodeChildren | undefined
 } {
   if (!isSelector(a)) {
@@ -115,7 +119,7 @@ export function extractArguments(a?: any, b?: any, c?: any): {
   }
 }
 
-function insertSelectorToData(data: VNodeData<Props, On>, selector: string): void {
+function insertSelectorToData(data: VNodeData<any, any>, selector: string): void {
   const { id, staticClass } = parseSelector(selector)
 
   if (staticClass) {
