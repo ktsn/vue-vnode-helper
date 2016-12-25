@@ -9,8 +9,8 @@ Helpers for Vue's createElement inspired by [hyperscript-helpers](https://github
 
 ```js
 // component.js
-import { helpers, apply } from 'vue-vnode-helper'
-const { article, h1, p, tag } = helpers // Get element helpers you want to use
+import { tag, helpers, apply } from 'vue-vnode-helper'
+const { article, h1, p } = helpers // Get element helpers you want to use
 
 import OtherComponent from './other-component'
 
@@ -42,6 +42,44 @@ export default {
   }
 }
 ```
+
+## API Reference
+
+- `helpers: { [key: string]: (selector?: string, data?: VNodeData, children?: VNodeChildren): VNodeThunk }`
+
+  Built-in helpers. All HTML5 elements and special elements of Vue.js are available. The helpers generates `VNodeThunk` that must be transformed by `apply` function.
+
+- `tag(tag?: string | Component, selector?: string, data?: VNodeData, children?: VNodeChildren): VNodeThunk`
+
+  A fallback helper that can be specified any element/component name or component options object/constructor.
+
+- `apply(createElement: CreateElement, thunk: VNodeThunk): VNode`
+
+  Transform `VNodeThunk` to actual VNode.
+
+- `createHelper(tag?: string | Component): (selector?: string, data?: VNodeData, children: VNodeChildren) => VNodeThunk`
+
+  Create a new vnode helper.
+
+  ```js
+  // Some Vue component
+  const MyComp = {
+    props: ['message'],
+    template: '<div>{{ message }}'
+  }
+
+  // Create MyComp helper
+  const myComp = createHelper(MyComp)
+
+  // Use MyComp helper in another component
+  render (h) {
+    return apply(h,
+      div('.wrapper', [
+        myComp({ props: { message: this.value }})
+      ]
+    ))
+  }
+  ```
 
 ## License
 
